@@ -137,7 +137,7 @@ export default function BuilderCanvas({
               margin={[10, 10]}
               containerPadding={[10, 10]}
               useCSSTransforms={true}
-              droppingItem={{ i: '__dropping-elem__', w: 6, h: 4 }}
+              droppingItem={{ i: '__dropping-elem__', x: 0, y: 0, w: 6, h: 4 }}
             >
               {items.map((item) => (
                 <div
