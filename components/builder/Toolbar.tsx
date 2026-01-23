@@ -22,7 +22,7 @@ export default function Toolbar({
           <Home size={20} />
         </Link>
         <div className="h-6 w-px bg-gray-600"></div>
-        <h1 className="text-xl font-bold">Website Builder</h1>
+        <h1 className="text-xl font-bold">webMe</h1>
       </div>
 
       <div className="flex items-center gap-6">
