@@ -19,13 +19,13 @@ export default function ComponentPalette({ onAddComponent }: ComponentPalettePro
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
 
   const components: ComponentDefinition[] = [
+    { type: 'header', icon: Newspaper, label: 'Header', description: 'Banner section' },
+    { type: 'navbar', icon: Navigation, label: 'Navbar', description: 'Navigation bar' },
+    { type: 'container', icon: Layout, label: 'Container', description: 'Group components together' },
     { type: 'heading', icon: Type, label: 'Heading', description: 'Large title text' },
     { type: 'text', icon: Edit, label: 'Text', description: 'Paragraph text' },
-    { type: 'image', icon: Image, label: 'Image', description: 'Image placeholder' },
+    { type: 'image', icon: Image, label: 'Image', description: 'Add an image' },
     { type: 'button', icon: Square, label: 'Button', description: 'Clickable button' },
-    { type: 'container', icon: Layout, label: 'Container', description: 'Box for nesting' },
-    { type: 'navbar', icon: Navigation, label: 'Navbar', description: 'Navigation bar' },
-    { type: 'header', icon: Newspaper, label: 'Header', description: 'Hero section' },
   ];
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, type: ComponentType) => {

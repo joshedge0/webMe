@@ -12,7 +12,7 @@ export type GoogleFont =
   | 'Roboto'
   | 'Open Sans'
   | 'Montserrat'
-  | 'Poppins'
+  | 'Nunito'
   | 'Playfair Display'
   | 'Lora';
 

@@ -41,7 +41,7 @@ export const GOOGLE_FONTS: { value: GoogleFont; label: string }[] = [
   { value: 'Roboto', label: 'Roboto' },
   { value: 'Open Sans', label: 'Open Sans' },
   { value: 'Montserrat', label: 'Montserrat' },
-  { value: 'Poppins', label: 'Poppins' },
+  { value: 'Nunito', label: 'Nunito' },
   { value: 'Playfair Display', label: 'Playfair Display' },
   { value: 'Lora', label: 'Lora' },
 ];
