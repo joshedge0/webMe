@@ -17,7 +17,6 @@ interface ContextMenuState {
   y: number;
   id: string;
 }
-
 export default function BuilderPage() {
   const [items, setItems] = useState<ComponentItem[]>([]);
   const [isPreview, setIsPreview] = useState(false);
