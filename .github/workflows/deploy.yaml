@@ -1,4 +1,4 @@
-name: Build and Push Container
+name: Deploy latest webMe
 
 on:
   push:
