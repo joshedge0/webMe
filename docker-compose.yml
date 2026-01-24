@@ -3,3 +3,5 @@ services:
     build: .
     container_name: webme
     restart: always
+    ports:
+      - "3000:3000"
