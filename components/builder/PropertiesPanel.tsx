@@ -229,15 +229,6 @@ export default function PropertiesPanel({ selectedItem, onUpdate, pageSettings }
           </div>
         </>
       )}
-
-      {isContainer && (
-        <div className="p-3 bg-blue-50 rounded-lg text-sm text-gray-700">
-          <p className="font-medium mb-1">📦 Container</p>
-          <p className="text-xs">
-            Drop other components inside this container. It will automatically adjust to fit its contents.
-          </p>
-        </div>
-      )}
     </div>
   );
 }
