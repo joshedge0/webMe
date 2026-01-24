@@ -35,10 +35,19 @@ export default function ComponentPalette({ onAddComponent, onDragStart, onDragEn
     e.dataTransfer.setData('text/plain', type);
     
     // Create a drag image
+    const rect = e.currentTarget.getBoundingClientRect();
+
     const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.width = `${rect.width}px`;
+    dragImage.style.height = `${rect.height}px`;
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-1000px';
+    dragImage.style.left = '-1000px';
     dragImage.style.opacity = '0.5';
+    dragImage.style.pointerEvents = 'none';
+
     document.body.appendChild(dragImage);
-    e.dataTransfer.setDragImage(dragImage, 0, 0);
+    e.dataTransfer.setDragImage(dragImage, rect.width / 2, rect.height / 2);
     setTimeout(() => document.body.removeChild(dragImage), 0);
   };
 

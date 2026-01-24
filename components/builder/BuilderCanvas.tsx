@@ -38,16 +38,10 @@ export default function BuilderCanvas({
   currentDragType,
 }: BuilderCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const gridContainerRef = useRef<HTMLDivElement>(null);
   const nextIdRef = useRef(items.length + 1);
   const [isDragging, setIsDragging] = useState(false);
   const [numCols, setNumCols] = useState(42);
   const [rowHeight, setRowHeight] = useState(18);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  }, []);
 
   const handleDrop = useCallback(
     (layout: Layout, layoutItem: any, event: any) => {
@@ -115,7 +109,6 @@ export default function BuilderCanvas({
       className="flex-1 overflow-auto canvas-wrapper"
       style={{ backgroundColor }}
       onClick={handleCanvasClick}
-      onDragOver={handleDragOver}
     >
       {items.length === 0 && !isPreview ? (
         <div className="h-full flex items-center justify-center text-gray-400 pointer-events-none">
@@ -128,7 +121,6 @@ export default function BuilderCanvas({
       ) : (
         <div className="flex justify-center min-h-full">
           <div
-            ref={gridContainerRef}
             className="relative w-full"
             style={{
               maxWidth: isPreview ? `${pageSettings.width}px` : 'none',
@@ -150,9 +142,9 @@ export default function BuilderCanvas({
               isDraggable={!isPreview}
               isResizable={!isPreview}
               compactType={null}
-              preventCollision={isDragging}
-              margin={[10, 10]}
-              containerPadding={[10, 10]}
+              //preventCollision={isDragging}
+              margin={[1, 1]}
+              containerPadding={[1, 1]}
               useCSSTransforms={true}
               droppingItem={{ i: '__dropping-elem__', x: 0, y: 0, w: droppingItemSize.w, h: droppingItemSize.h }}
             >

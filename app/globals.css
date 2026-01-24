@@ -37,13 +37,13 @@
 }
 
 .react-grid-item.react-grid-placeholder {
-  background: rgb(59, 130, 246);
-  opacity: 0.2;
-  transition-duration: 100ms;
-  z-index: 2;
-  border-radius: 8px;
+  background-color: #3e7df2 !important;
+  opacity: 0.3 !important;
+  transition-duration: 100ms !important;
+  z-index: 2 !important;
+  border-radius: 8px !important;
 }
-
+ 
 /* React Resizable Styles */
 .react-resizable {
   position: relative;
