@@ -18,15 +18,6 @@ export const ComponentTypes: Record<string, ComponentType> = {
   HEADER: 'header',
 } as const;
 
-// Grid configuration - smaller grid for finer control
-export const GRID_CONFIG: GridConfig = {
-  rowHeight: 30, // Reduced from 60
-  cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-  breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
-  margin: [10, 10],
-  containerPadding: [0, 0],
-};
-
 // Default page settings
 export const DEFAULT_PAGE_SETTINGS: PageSettings = {
   backgroundColor: '#ffffff',
@@ -50,27 +41,27 @@ export const GOOGLE_FONTS: { value: GoogleFont; label: string }[] = [
 export const getDefaultComponentData = (type: ComponentType, defaultFont?: GoogleFont): BaseComponentData => {
   const defaults: Record<ComponentType, BaseComponentData> = {
     heading: {
-      text: 'Your Heading Here',
-      fontSize: '2xl',
+      text: 'Click to edit...',
+      fontSize: 'xl',
       color: '#000000',
       fontFamily: defaultFont || 'Inter',
       textAlign: 'left',
       verticalAlign: 'top',
     },
     text: {
-      text: 'Your text content here. Click to edit.',
+      text: 'Click to edit...',
       fontSize: 'base',
       color: '#000000',
       fontFamily: defaultFont || 'Inter',
-      textAlign: 'left',
-      verticalAlign: 'top',
+      textAlign: 'center',
+      verticalAlign: 'middle',
     },
     image: {
       src: '',
       alt: 'Image',
     },
     button: {
-      text: 'Click Me',
+      text: 'Button',
       fontSize: 'base',
       color: '#ffffff',
       bgColor: '#2563eb',
@@ -88,16 +79,13 @@ export const getDefaultComponentData = (type: ComponentType, defaultFont?: Googl
       logo: '',
       links: [
         { text: 'Home', href: '#home' },
-        { text: 'About', href: '#about' },
-        { text: 'Services', href: '#services' },
-        { text: 'Contact', href: '#contact' },
       ],
     },
     header: {
-      text: 'Welcome to My Site',
-      fontSize: '2xl',
+      text: 'Your Website',
+      fontSize: 'xl',
       color: '#ffffff',
-      bgColor: '#2563eb',
+      bgColor: '#21345e',
       fontFamily: defaultFont || 'Inter',
       textAlign: 'center',
       verticalAlign: 'middle',
@@ -109,13 +97,13 @@ export const getDefaultComponentData = (type: ComponentType, defaultFont?: Googl
 // Default grid dimensions (adjusted for smaller grid)
 export const getDefaultGridDimensions = (type: ComponentType): { w: number; h: number } => {
   const dimensions: Record<ComponentType, { w: number; h: number }> = {
-    heading: { w: 12, h: 3 },
-    text: { w: 6, h: 4 },
-    image: { w: 6, h: 8 },
-    button: { w: 4, h: 3 },
-    container: { w: 6, h: 8 },
-    navbar: { w: 12, h: 4 },
-    header: { w: 12, h: 10 },
+    header: { w: 42, h: 4 },
+    navbar: { w: 42, h: 4 },
+    container: { w: 20, h: 12 },
+    heading: { w: 18, h: 4 },
+    text: { w: 10, h: 4 },
+    image: { w: 9, h: 6 },
+    button: { w: 5, h: 2 }
   };
   return dimensions[type];
 };

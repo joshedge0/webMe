@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import HeadingItem from './items/HeadingItem';
 import TextItem from './items/TextItem';
 import ImageItem from './items/ImageItem';

@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import EditableText from '../EditableText';
 import type { HeaderData } from '@/types';
 
@@ -10,10 +9,30 @@ interface HeaderItemProps {
   isPreview?: boolean;
 }
 
+const fontSizeClasses: Record<string, string> = {
+  sm: 'text-xl',
+  base: 'text-2xl',
+  lg: 'text-3xl',
+  xl: 'text-4xl',
+  '2xl': 'text-5xl',
+};
+
+const textAlignClasses: Record<string, string> = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+};
+
+const verticalAlignClasses: Record<string, string> = {
+  top: 'items-start',
+  middle: 'items-center',
+  bottom: 'items-end',
+};
+
 export default function HeaderItem({ data, onUpdate, isPreview = false }: HeaderItemProps) {
   return (
     <header
-      className="w-full h-full flex flex-col items-center justify-center text-center px-6"
+      className={`w-full h-full flex ${verticalAlignClasses[data.verticalAlign || 'center']}`}
       style={{
         backgroundColor: data.bgColor,
         fontFamily: data.fontFamily || 'Inter',
@@ -21,22 +40,12 @@ export default function HeaderItem({ data, onUpdate, isPreview = false }: Header
     >
       <EditableText
         tag="h1"
-        value={data.title || 'Welcome to My Site'}
-        onChange={(newText) => onUpdate({ ...data, title: newText })}
-        className="text-4xl md:text-5xl font-bold mb-4"
+        value={data.text}
+        onChange={(newText) => onUpdate({ ...data, text: newText })}
+        className={`font-bold w-full ${fontSizeClasses[data.fontSize] || 'text-3xl'} ${textAlignClasses[data.textAlign || 'left']} break-words`}
         style={{ color: data.color || '#ffffff' }}
         isPreview={isPreview}
       />
-      {data.subtitle && (
-        <EditableText
-          tag="p"
-          value={data.subtitle}
-          onChange={(newText) => onUpdate({ ...data, subtitle: newText })}
-          className="text-lg md:text-xl"
-          style={{ color: data.color || '#ffffff' }}
-          isPreview={isPreview}
-        />
-      )}
     </header>
   );
 }

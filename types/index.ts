@@ -100,10 +100,10 @@ export interface NavbarData {
 }
 
 export interface HeaderData {
-  title: string;
-  subtitle?: string;
+  text: string;
   bgColor: string;
   fontFamily?: GoogleFont;
+  fontSize: FontSize;
   customFontSet?: boolean;
   textAlign?: TextAlign;
   verticalAlign?: VerticalAlign;

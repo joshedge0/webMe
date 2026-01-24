@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Type, Edit, Image, Square, Layout, Navigation, Newspaper } from 'lucide-react';
 import type { ComponentType, Position } from '@/types';
 
 interface ComponentPaletteProps {
   onAddComponent: (type: ComponentType, position?: Position) => void;
+  onDragStart: (type: ComponentType) => void;
+  onDragEnd: () => void;
 }
 
 interface ComponentDefinition {
@@ -15,13 +17,11 @@ interface ComponentDefinition {
   description: string;
 }
 
-export default function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
-  const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
-
+export default function ComponentPalette({ onAddComponent, onDragStart, onDragEnd }: ComponentPaletteProps) {
   const components: ComponentDefinition[] = [
     { type: 'header', icon: Newspaper, label: 'Header', description: 'Banner section' },
     { type: 'navbar', icon: Navigation, label: 'Navbar', description: 'Navigation bar' },
-    { type: 'container', icon: Layout, label: 'Container', description: 'Group components together' },
+    //{ type: 'container', icon: Layout, label: 'Container', description: 'Group components together' },
     { type: 'heading', icon: Type, label: 'Heading', description: 'Large title text' },
     { type: 'text', icon: Edit, label: 'Text', description: 'Paragraph text' },
     { type: 'image', icon: Image, label: 'Image', description: 'Add an image' },
@@ -29,7 +29,7 @@ export default function ComponentPalette({ onAddComponent }: ComponentPalettePro
   ];
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, type: ComponentType) => {
-    setDraggedType(type);
+    onDragStart(type);
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('componentType', type);
     e.dataTransfer.setData('text/plain', type);
@@ -43,7 +43,7 @@ export default function ComponentPalette({ onAddComponent }: ComponentPalettePro
   };
 
   const handleDragEnd = () => {
-    setDraggedType(null);
+    onDragEnd();
   };
 
   return (
@@ -56,11 +56,8 @@ export default function ComponentPalette({ onAddComponent }: ComponentPalettePro
             draggable
             onDragStart={(e) => handleDragStart(e, type)}
             onDragEnd={handleDragEnd}
-            onClick={() => onAddComponent(type, { x: 0, y: 0 })}
-            className={`w-full p-3 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-move ${
-              draggedType === type ? 'opacity-50' : ''
-            }`}
-          >
+            onClick={() => onAddComponent(type, { x: 0, y: 0 })} // convert to add component at next available location
+            className={`w-full p-3 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-move`}>
             <div className="flex items-start gap-3">
               <Icon size={20} className="flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
