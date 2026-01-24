@@ -56,7 +56,7 @@ export default function ComponentPalette({ onAddComponent }: ComponentPalettePro
             draggable
             onDragStart={(e) => handleDragStart(e, type)}
             onDragEnd={handleDragEnd}
-            onClick={() => onAddComponent(type, { x: 20, y: 20 })}
+            onClick={() => onAddComponent(type, { x: 0, y: 0 })}
             className={`w-full p-3 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-move ${
               draggedType === type ? 'opacity-50' : ''
             }`}
