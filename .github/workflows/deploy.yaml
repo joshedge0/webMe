@@ -12,19 +12,8 @@ jobs:
       packages: write
       
     steps:
-      - name: Checkout
+      - name: Pull latest code
         uses: actions/checkout@v4
-      
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/joshedge0/webme:latest
+
+      - name: Update container with docker-compose
+        run: docker-compose -f ~/actions-runner/_work/webMe/webMe/docker-compose.yml up -d --build  
