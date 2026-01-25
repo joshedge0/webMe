@@ -41,7 +41,7 @@ export default function PageSettingsDialog({ settings, onUpdate, onClose }: Page
         className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 sticky top-0 bg-white">
           <h2 className="text-xl font-bold">Page Settings</h2>
           <button
             onClick={onClose}
@@ -102,26 +102,6 @@ export default function PageSettingsDialog({ settings, onUpdate, onClose }: Page
             </div>
           </div>
 
-          {/* Page Width */}
-          <div>
-            <label className="block text-sm font-medium mb-3">
-              Page Width: {settings.width}px
-            </label>
-            <input
-              type="range"
-              min="800"
-              max="1920"
-              step="50"
-              value={settings.width}
-              onChange={(e) => onUpdate({ ...settings, width: parseInt(e.target.value) })}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-2">
-              <span>800px</span>
-              <span>1920px</span>
-            </div>
-          </div>
-
           {/* Default Font */}
           <div>
             <label className="block text-sm font-medium mb-3">Default Font</label>
@@ -144,7 +124,7 @@ export default function PageSettingsDialog({ settings, onUpdate, onClose }: Page
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t bg-gray-50 flex justify-end gap-3">
+        <div className="px-6 pb-6 flex justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

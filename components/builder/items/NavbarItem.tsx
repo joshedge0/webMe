@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Menu, Plus, Trash2, Upload, X } from 'lucide-react';
+import { useState } from 'react';
+import EditableText from '../EditableText';
+import { Menu, Plus, X } from 'lucide-react';
 import type { NavbarData, NavbarLink } from '@/types';
 
 interface NavbarItemProps {
@@ -10,9 +11,16 @@ interface NavbarItemProps {
   isPreview?: boolean;
 }
 
+const fontSizeClasses: Record<string, string> = {
+  sm: 'text-xl',
+  base: 'text-2xl',
+  lg: 'text-3xl',
+  xl: 'text-4xl',
+  '2xl': 'text-5xl',
+};
+
 export default function NavbarItem({ data, onUpdate, isPreview = false }: NavbarItemProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [showLogoInput, setShowLogoInput] = useState(false);
 
   const links = data.links || [
     { text: 'Home', href: '#home' },
@@ -37,10 +45,6 @@ export default function NavbarItem({ data, onUpdate, isPreview = false }: Navbar
     onUpdate({ ...data, links: newLinks });
   };
 
-  const handleLogoUpload = (url: string) => {
-    onUpdate({ ...data, logo: url });
-    setShowLogoInput(false);
-  };
 
   return (
     <nav
@@ -50,60 +54,23 @@ export default function NavbarItem({ data, onUpdate, isPreview = false }: Navbar
         fontFamily: data.fontFamily || 'Inter',
       }}
     >
-      {/* Logo Section */}
-      <div className="flex items-center gap-3">
-        {data.logo ? (
-          <div className="relative group">
-            <img src={data.logo} alt="Logo" className="h-8 object-contain" />
-            {!isPreview && (
-              <button
-                onClick={() => onUpdate({ ...data, logo: '' })}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+      {/* Title Section */}
+          <header
+                className="w-128 h-32 flex items-center"
+                style={{
+                  backgroundColor: data.bgColor,
+                  fontFamily: data.fontFamily || 'Inter',
+                }}
               >
-                <X size={12} />
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="text-white font-bold text-xl">
-            {!isPreview ? (
-              showLogoInput ? (
-                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="text"
-                    placeholder="Logo URL"
-                    className="px-2 py-1 text-sm rounded text-black"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleLogoUpload((e.target as HTMLInputElement).value);
-                      } else if (e.key === 'Escape') {
-                        setShowLogoInput(false);
-                      }
-                    }}
-                    autoFocus
-                  />
-                  <button
-                    onClick={() => setShowLogoInput(false)}
-                    className="text-xs bg-gray-600 px-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLogoInput(true)}
-                  className="text-sm flex items-center gap-2 hover:opacity-80"
-                >
-                  <Upload size={16} />
-                  Add Logo
-                </button>
-              )
-            ) : (
-              'Logo'
-            )}
-          </div>
-        )}
-      </div>
+                <EditableText
+                  tag="h1"
+                  value={data.text}
+                  onChange={(newText) => onUpdate({ ...data, text: newText })}
+                  className={`font-bold w-full ${fontSizeClasses[data.fontSize] || 'text-2xl'} break-words`}
+                  style={{ color: data.color || '#ffffff' }}
+                  isPreview={isPreview}
+                />
+              </header>
 
       {/* Navigation Links */}
       <div className="hidden md:flex gap-6 items-center">
@@ -177,5 +144,5 @@ export default function NavbarItem({ data, onUpdate, isPreview = false }: Navbar
         <Menu size={24} />
       </button>
     </nav>
-  );
+    );
 }

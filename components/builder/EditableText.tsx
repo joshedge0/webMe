@@ -61,7 +61,7 @@ export default function EditableText({
           setIsEditing(true);
         }
       }}
-      className={`${!isPreview ? 'cursor-pointer hover:bg-gray-50' : ''} ${className}`}
+      className={`${!isPreview ? 'cursor-pointer' : ''} ${className}`}
       style={style}
     >
       {text || 'Click to edit...'}

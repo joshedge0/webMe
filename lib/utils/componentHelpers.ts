@@ -11,7 +11,7 @@ import type { ComponentItem, ComponentType, Position, GoogleFont } from '@/types
 export function createComponent(
   type: ComponentType,
   id: string,
-  position: Position = { x: 0, y: 0 },
+  position: Position = { x: 0, y: 0 }, // call calculateOptimalPosition here
   defaultFont?: GoogleFont
 ): ComponentItem {
   const dimensions = getDefaultGridDimensions(type);
@@ -94,6 +94,7 @@ export function importLayout(jsonString: string): ComponentItem[] {
 
 /**
  * Calculate optimal position for new component
+ * NOT USED, IMPLEMENT IF ITEMS NEED TO NOT SPAWN AT 0,0
  */
 export function calculateOptimalPosition(
   existingItems: ComponentItem[],

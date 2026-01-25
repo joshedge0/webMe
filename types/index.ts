@@ -92,11 +92,13 @@ export interface ContainerData {
 }
 
 export interface NavbarData {
+  text: string;
   bgColor: string;
   fontFamily?: GoogleFont;
+  fontSize: FontSize;
   customFontSet?: boolean;
-  logo?: string;
   links: NavbarLink[];
+  color?: string;
 }
 
 export interface HeaderData {

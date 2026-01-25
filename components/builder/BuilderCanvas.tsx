@@ -1,14 +1,20 @@
-'use client';
+"use client";
 
-import React, { useRef, useCallback, useState, useEffect, use } from 'react';
-import { Responsive, Layout, WidthProvider } from 'react-grid-layout/legacy';
-import { Layout as LayoutIcon } from 'lucide-react';
-import GridItemWrapper from './GridItemWrapper';
-import { generateComponentId } from '@/lib/utils/componentHelpers';
-import type { ComponentItem, ComponentType, Position, BaseComponentData, PageSettings } from '@/types';
-import { getDefaultGridDimensions } from '@/lib/constants';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
+import React, { useRef, useCallback, useState, useEffect, use } from "react";
+import { Responsive, Layout, WidthProvider } from "react-grid-layout/legacy";
+import { Layout as LayoutIcon } from "lucide-react";
+import GridItemWrapper from "./GridItemWrapper";
+import { generateComponentId } from "@/lib/utils/componentHelpers";
+import type {
+  ComponentItem,
+  ComponentType,
+  Position,
+  BaseComponentData,
+  PageSettings,
+} from "@/types";
+import { getDefaultGridDimensions } from "@/lib/constants";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -20,7 +26,11 @@ interface BuilderCanvasProps {
   onUpdate: (id: string, newData: BaseComponentData) => void;
   onLayoutChange: (layout: Layout) => void;
   onContextMenu: (e: React.MouseEvent, id: string) => void;
-  onAddComponent: (type: ComponentType, position?: Position, customId?: string) => void;
+  onAddComponent: (
+    type: ComponentType,
+    position?: Position,
+    customId?: string,
+  ) => void;
   pageSettings: PageSettings;
   currentDragType: ComponentType | null;
 }
@@ -41,14 +51,16 @@ export default function BuilderCanvas({
   const nextIdRef = useRef(items.length + 1);
   const [isDragging, setIsDragging] = useState(false);
   const [numCols, setNumCols] = useState(42);
-  const [rowHeight, setRowHeight] = useState(18);
+  const [rowHeight, setRowHeight] = useState(26);
 
   const handleDrop = useCallback(
     (layout: Layout, layoutItem: any, event: any) => {
-      const componentType = event.dataTransfer?.getData('componentType') as ComponentType;
+      const componentType = event.dataTransfer?.getData(
+        "componentType",
+      ) as ComponentType;
       if (!componentType) return;
 
-      const newId = generateComponentId('item', nextIdRef.current);
+      const newId = generateComponentId("item", nextIdRef.current);
       nextIdRef.current += 1;
 
       // Use layoutItem position from react-grid-layout
@@ -61,24 +73,26 @@ export default function BuilderCanvas({
         onAddComponent(componentType, position, newId);
       }
     },
-    [onAddComponent]
+    [onAddComponent],
   );
 
   const handleLayoutChange = useCallback(
     (layout: Layout) => {
       if (!isDragging) {
-        const filteredLayout = (layout as any[]).filter((item: any) => item.i !== '__dropping-elem__');
+        const filteredLayout = (layout as any[]).filter(
+          (item: any) => item.i !== "__dropping-elem__",
+        );
         onLayoutChange(filteredLayout as Layout);
       }
     },
-    [onLayoutChange, isDragging]
+    [onLayoutChange, isDragging], //
   );
 
   const handleCanvasClick = (e: React.MouseEvent) => {
     if (
       e.target === canvasRef.current ||
-      (e.target as HTMLElement).classList.contains('react-grid-layout') ||
-      (e.target as HTMLElement).classList.contains('canvas-wrapper')
+      (e.target as HTMLElement).classList.contains("react-grid-layout") ||
+      (e.target as HTMLElement).classList.contains("canvas-wrapper")
     ) {
       onSelect(null);
     }
@@ -95,11 +109,12 @@ export default function BuilderCanvas({
     maxW: item.maxW || 12,
   })) as Layout;
 
-  const backgroundColor = pageSettings.themeMode === 'dark' 
-    ? '#1f2937' 
-    : pageSettings.backgroundColor;
+  const backgroundColor =
+    pageSettings.themeMode === "dark"
+      ? "#1f2937"
+      : pageSettings.backgroundColor;
 
-   const droppingItemSize = currentDragType 
+  const droppingItemSize = currentDragType
     ? getDefaultGridDimensions(currentDragType)
     : { w: 6, h: 4 };
 
@@ -110,73 +125,92 @@ export default function BuilderCanvas({
       style={{ backgroundColor }}
       onClick={handleCanvasClick}
     >
-      {items.length === 0 && !isPreview ? (
-        <div className="h-full flex items-center justify-center text-gray-400 pointer-events-none">
-          <div className="text-center">
-            <LayoutIcon size={64} className="mx-auto mb-4" />
-            <p className="text-lg font-medium">Drag components from the left to get started</p>
-            <p className="text-sm mt-2">or click a component to add it to the canvas</p>
-          </div>
-        </div>
-      ) : (
-        <div className="flex justify-center min-h-full">
-          <div
-            className="relative w-full"
+      <div className="flex justify-center h-full">
+        <div 
+          className="relative w-full h-full"
+          style={{
+            width: !isPreview ? '100%' : 'calc(100% - 32rem)'
+          }}
+        >
+          {items.length === 0 && !currentDragType && !isPreview && (
+            <div className="absolute top-64 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white rounded-lg h-64 w-128 flex items-center justify-center text-gray-400 pointer-events-none">
+              <div className="text-center">
+                <LayoutIcon size={64} className="mx-auto mb-4" />
+                <p className="text-lg font-medium">
+                  Drag components from the left to get started
+                </p>
+                <p className="text-sm mt-2">
+                  or click a component to add it to the canvas
+                </p>
+              </div>
+            </div>
+          )}
+
+          <ResponsiveGridLayout
+            className="layout"
             style={{
-              maxWidth: isPreview ? `${pageSettings.width}px` : 'none',
+              minHeight: "100%",
+            }}
+            layouts={{ lg: layoutItems }}
+            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+            cols={{
+              lg: numCols,
+              md: numCols,
+              sm: numCols,
+              xs: numCols,
+              xxs: numCols,
+            }}
+            rowHeight={rowHeight}
+            onLayoutChange={handleLayoutChange}
+            onDrop={handleDrop}
+            onDragStart={() => setIsDragging(true)}
+            onDragStop={() => setIsDragging(false)}
+            onResizeStart={() => setIsDragging(true)}
+            onResizeStop={() => setIsDragging(false)}
+            isDroppable={!isPreview}
+            isDraggable={!isPreview}
+            isResizable={!isPreview}
+            compactType={null}
+            preventCollision={true}
+            margin={[1, 1]}
+            containerPadding={[1, 1]}
+            useCSSTransforms={true}
+            droppingItem={{
+              i: "__dropping-elem__",
+              x: 0,
+              y: 0,
+              w: droppingItemSize.w,
+              h: droppingItemSize.h,
             }}
           >
-            <ResponsiveGridLayout
-              className="layout"
-              layouts={{ lg: layoutItems }}
-              breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-              cols={{ lg: numCols, md: numCols, sm: numCols, xs: numCols, xxs: numCols }}
-              rowHeight={rowHeight}
-              onLayoutChange={handleLayoutChange}
-              onDrop={handleDrop}
-              onDragStart={() => setIsDragging(true)}
-              onDragStop={() => setIsDragging(false)}
-              onResizeStart={() => setIsDragging(true)}
-              onResizeStop={() => setIsDragging(false)}
-              isDroppable={!isPreview}
-              isDraggable={!isPreview}
-              isResizable={!isPreview}
-              compactType={null}
-              //preventCollision={isDragging}
-              margin={[1, 1]}
-              containerPadding={[1, 1]}
-              useCSSTransforms={true}
-              droppingItem={{ i: '__dropping-elem__', x: 0, y: 0, w: droppingItemSize.w, h: droppingItemSize.h }}
-            >
-              {items.map((item) => (
-                <div
-                  key={item.i}
-                  className={`${selectedId === item.i && !isPreview ? 'ring-2 ring-blue-500 ring-offset-2' : ''} transition-shadow rounded-lg`}
-                  onClick={(e) => {
-                    if (!isPreview) {
-                      e.stopPropagation();
-                      onSelect(item.i);
-                    }
-                  }}
-                  onContextMenu={(e) => {
+            {items.map((item) => (
+              <div
+                key={item.i}
+                className={`${selectedId === item.i && !isPreview ? "ring-2 ring-blue-500 ring-offset-2" : ""} transition-shadow rounded-lg`}
+                onClick={(e) => {
+                  if (!isPreview) {
                     e.stopPropagation();
-                    onContextMenu(e, item.i);
-                  }}
-                >
-                  <GridItemWrapper
-                    id={item.i}
-                    type={item.type}
-                    data={item.data}
-                    isPreview={isPreview}
-                    isSelected={selectedId === item.i}
-                    onUpdate={onUpdate}
-                  />
-                </div>
-              ))}
-            </ResponsiveGridLayout>
-          </div>
+                    onSelect(item.i);
+                  }
+                }}
+                onContextMenu={(e) => {
+                  e.stopPropagation();
+                  onContextMenu(e, item.i);
+                }}
+              >
+                <GridItemWrapper
+                  id={item.i}
+                  type={item.type}
+                  data={item.data}
+                  isPreview={isPreview}
+                  isSelected={selectedId === item.i}
+                  onUpdate={onUpdate}
+                />
+              </div>
+            ))}
+          </ResponsiveGridLayout>
         </div>
-      )}
+      </div>
     </div>
   );
 }

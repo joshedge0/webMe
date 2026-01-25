@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Default border color */
+[class*="border"] {
+  border-color: rgb(209 213 219);
+}
+
 /* React Grid Layout Styles */
 .react-grid-layout {
   position: relative;

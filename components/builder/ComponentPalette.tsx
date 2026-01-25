@@ -19,7 +19,7 @@ interface ComponentDefinition {
 
 export default function ComponentPalette({ onAddComponent, onDragStart, onDragEnd }: ComponentPaletteProps) {
   const components: ComponentDefinition[] = [
-    { type: 'header', icon: Newspaper, label: 'Header', description: 'Banner section' },
+    //{ type: 'header', icon: Newspaper, label: 'Header', description: 'Banner section' },
     { type: 'navbar', icon: Navigation, label: 'Navbar', description: 'Navigation bar' },
     //{ type: 'container', icon: Layout, label: 'Container', description: 'Group components together' },
     { type: 'heading', icon: Type, label: 'Heading', description: 'Large title text' },

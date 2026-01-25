@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { AlignLeft, AlignCenter, AlignRight, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from 'lucide-react';
 import { GOOGLE_FONTS } from '@/lib/constants';
 import type { ComponentItem, BaseComponentData, PageSettings } from '@/types';
@@ -23,7 +22,7 @@ export default function PropertiesPanel({ selectedItem, onUpdate, pageSettings }
 
   const { data, type } = selectedItem;
 
-  const hasTextFormatting = ['heading', 'text', 'button', 'header'].includes(type);
+  const hasTextFormatting = ['heading', 'text', 'navbar', 'button', 'header'].includes(type);
   const hasBackgroundColor = ['button', 'container', 'navbar', 'header'].includes(type);
   const hasFont = ['heading', 'text', 'button', 'navbar', 'header'].includes(type);
   const hasAlignment = ['heading', 'text', 'button', 'header'].includes(type);

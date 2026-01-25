@@ -40,7 +40,7 @@ export default function BuilderPage() {
 
   const addComponent = (
     type: ComponentType,
-    position: Position = { x: 0, y: 0 },
+    position: Position = { x: 0, y: 0 }, //convert to find highest y with no collisions
     customId?: string,
   ) => {
     const id = customId || `item-${nextId}`;
