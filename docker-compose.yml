@@ -3,5 +3,47 @@ services:
     build: .
     container_name: webme
     restart: always
+    environment:
+       - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PW}@postgres:5432/${DATABASE_NAME}
     ports:
       - "3000:3000"
+    networks:
+      - internal
+      - web
+    
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PW}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - webme-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - internal
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - internal
+    volumes:
+     - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  webme-data:
+  pgadmin-data:
+
+networks:
+  internal:
+  web:
