@@ -1,5 +1,8 @@
 import './globals.css'
 import { Nunito, Inter, Roboto, Open_Sans, Montserrat, Playfair_Display, Lora } from 'next/font/google';
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import SessionWrapper from "@/components/SessionWrapper"
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' });
@@ -15,13 +18,16 @@ export const metadata = {
   description: 'Build beautiful websites with drag and drop',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession(authOptions)
   return (
     <html
       lang="en"
       className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${montserrat.variable} ${nunito.variable} ${playfair.variable} ${lora.variable}`}
     >
-      <body>{children}</body>
+      <SessionWrapper session={session}>
+        <body>{children}</body>
+      </SessionWrapper>
     </html>
   )
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import SignInButton from "@/components/SignInButton";
 import { Eye, Edit, Settings, Home } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,9 +18,6 @@ export default function Toolbar({
   return (
     <div className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center shadow-lg">
       <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Home size={20} />
-        </Link>
         <div className="h-6 w-px bg-gray-600"></div>
         <h1 className="text-xl font-bold">webMe</h1>
       </div>
@@ -40,6 +37,7 @@ export default function Toolbar({
           {isPreview ? <Edit size={20} /> : <Eye size={20} />}
           {isPreview ? 'Edit Mode' : 'Preview'}
         </button>
+        <SignInButton />
       </div>
     </div>
   );
