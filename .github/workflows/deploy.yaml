@@ -23,8 +23,8 @@ jobs:
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GH_ID=${{ secrets.GH_ID }}
-          GH_SECRET=${{ secrets.GH_SECRET }}
+          GITHUB_ID=${{ secrets.GH_ID }}
+          GITHUB_SECRET=${{ secrets.GH_SECRET }}
           DATABASE_USER=${{ secrets.DATABASE_USER }}
           DATABASE_PW=${{ secrets.DATABASE_PW }}
           DATABASE_NAME=${{ secrets.DATABASE_NAME }}
@@ -32,5 +32,10 @@ jobs:
           PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
           EOF
 
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: Update container with docker compose
-        run: docker compose -f ~/actions-runner/_work/webMe/webMe/docker-compose.yml up -d --build
+        run: docker compose up -d --build
