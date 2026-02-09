@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useSession } from "next-auth/react"
 import type { Layout } from "react-grid-layout/legacy";
 import ComponentPalette from "@/components/builder/ComponentPalette";
@@ -45,6 +46,7 @@ export default function BuilderPage() {
   const [loading, setLoading] = useState(true);
   const [websiteId, setWebsiteId] = useState<string | null>(null);
   const [websiteTitle, setWebsiteTitle] = useState("My Website")
+  const toastDuration = 2000
 
   // Load website on mount
   useEffect(() => {
@@ -71,6 +73,7 @@ export default function BuilderPage() {
             setNextId(website.nextId);
           }
         }
+        toast.success(`${websiteTitle} loaded!`, { duration: toastDuration })
       } catch (error) {
         console.error('Failed to load website:', error);
       } finally {
@@ -206,7 +209,7 @@ export default function BuilderPage() {
       }
 
       const result = await response.json();
-      console.log('Saved:', result);
+      toast.success(`${websiteTitle} saved!`, { duration: toastDuration })
       
       // If this was a new website, store the ID
       if (!isUpdate) {

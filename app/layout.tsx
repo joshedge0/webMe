@@ -3,6 +3,7 @@ import { Nunito, Inter, Roboto, Open_Sans, Montserrat, Playfair_Display, Lora } 
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import SessionWrapper from "@/components/SessionWrapper"
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' });
@@ -26,7 +27,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${montserrat.variable} ${nunito.variable} ${playfair.variable} ${lora.variable}`}
     >
       <SessionWrapper session={session}>
-        <body>{children}</body>
+        
+        <body>
+          <Toaster position='bottom-right' />
+          {children}
+        </body>
       </SessionWrapper>
     </html>
   )
