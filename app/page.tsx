@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react"
 import type { Layout } from "react-grid-layout/legacy";
 import ComponentPalette from "@/components/builder/ComponentPalette";
 import BuilderCanvas from "@/components/builder/BuilderCanvas";
 import PropertiesPanel from "@/components/builder/PropertiesPanel";
 import PageSettingsDialog from "@/components/builder/PageSettingsDialog";
+import SaveWebsiteDialog from "@/components/SaveWebsiteDialog";
 import Toolbar from "@/components/builder/Toolbar";
 import ContextMenu from "@/components/builder/ContextMenu";
 import { createComponent, cloneComponent } from "@/lib/utils/componentHelpers";
@@ -16,6 +18,7 @@ import type {
   Position,
   BaseComponentData,
   PageSettings,
+  WebsiteData
 } from "@/types";
 
 interface ContextMenuState {
@@ -24,6 +27,7 @@ interface ContextMenuState {
   id: string;
 }
 export default function BuilderPage() {
+  const { data: session } = useSession()
   const [items, setItems] = useState<ComponentItem[]>([]);
   const [isPreview, setIsPreview] = useState(false);
   const [nextId, setNextId] = useState(1);
@@ -34,9 +38,48 @@ export default function BuilderPage() {
     DEFAULT_PAGE_SETTINGS,
   );
   const [showPageSettings, setShowPageSettings] = useState(false);
+  const [showSaveWesbiteDialog, setShowSaveWesbiteDialog] = useState(false);
   const [currentDragType, setCurrentDragType] = useState<ComponentType | null>(
     null,
   );
+  const [loading, setLoading] = useState(true);
+  const [websiteId, setWebsiteId] = useState<string | null>(null);
+  const [websiteTitle, setWebsiteTitle] = useState("My Website")
+
+  // Load website on mount
+  useEffect(() => {
+    async function loadWebsite() {
+      if (!session?.user?.id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/website');
+        if (response.ok) {
+          const data = await response.json();
+          
+          // If user has a website, load it
+          if (data.length > 0) {
+            const website = data[0];
+
+            // Parse and set state
+            setWebsiteId(website.id);
+            setWebsiteTitle(website.title)
+            setItems(JSON.parse(website.items));
+            setPageSettings(JSON.parse(website.pageSettings));
+            setNextId(website.nextId);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load website:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadWebsite();
+  }, [session?.user?.id]);
 
   const addComponent = (
     type: ComponentType,
@@ -132,7 +175,56 @@ export default function BuilderPage() {
     setCurrentDragType(null);
   };
 
+  const handleToggleSaveWebsite = () => {
+    setShowSaveWesbiteDialog(true)
+  }
+
+  const handleSaveWebsite = async (websiteTitle: string) => {
+    const websiteData = {
+      title: websiteTitle,
+      items: JSON.stringify(items),
+      pageSettings: JSON.stringify(pageSettings),
+      nextId: nextId
+    };
+    
+    try {
+      const isUpdate = websiteId !== null;
+      const response = await fetch('/api/website', {
+        method: isUpdate ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          isUpdate 
+            ? { id: websiteId, ...websiteData }
+            : websiteData
+        ),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to ${isUpdate ? 'update' : 'save'} website`);
+      }
+
+      const result = await response.json();
+      console.log('Saved:', result);
+      
+      // If this was a new website, store the ID
+      if (!isUpdate) {
+        setWebsiteId(result.id);
+      }
+      
+      setShowSaveWesbiteDialog(false);
+    } catch (error) {
+      console.error('Error saving website:', error);
+      // Optionally show error to user
+    }
+  };
+
   const selectedItem = items.find((item) => item.i === selectedId);
+
+  if (loading) {
+    return <div className="h-screen flex items-center justify-center">Loading...</div>
+  }
 
   return (
     <div className="h-screen flex flex-col">
@@ -140,6 +232,7 @@ export default function BuilderPage() {
         isPreview={isPreview}
         onTogglePreview={() => setIsPreview(!isPreview)}
         onToggleSettings={() => setShowPageSettings(true)}
+        onToggleSaveWebsite={() => handleToggleSaveWebsite()}
       />
 
       <div className="flex-1 flex overflow-hidden">
@@ -190,6 +283,15 @@ export default function BuilderPage() {
           onCut={() => cutComponent(contextMenu.id)}
           onPaste={clipboard ? pasteComponent : null}
           onClose={() => setContextMenu(null)}
+        />
+      )}
+
+      {showSaveWesbiteDialog && (
+        <SaveWebsiteDialog
+          onCancel={() => setShowSaveWesbiteDialog(false)}
+          onSave={(websiteTitle) => handleSaveWebsite(websiteTitle)}
+          websiteTitle={websiteTitle}
+          setWebsiteTitle={(websiteTitle) => setWebsiteTitle(websiteTitle)}
         />
       )}
     </div>

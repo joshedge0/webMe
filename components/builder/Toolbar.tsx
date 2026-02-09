@@ -1,20 +1,23 @@
 'use client';
 
 import SignInButton from "@/components/SignInButton";
-import { Eye, Edit, Settings, Home } from 'lucide-react';
-import Link from 'next/link';
+import { Eye, Edit, Settings, Save } from 'lucide-react';
+import { useSession } from "next-auth/react"
 
 interface ToolbarProps {
   isPreview: boolean;
   onTogglePreview: () => void;
   onToggleSettings: () => void;
+  onToggleSaveWebsite: () => void;
 }
 
 export default function Toolbar({
   isPreview,
   onTogglePreview,
   onToggleSettings,
+  onToggleSaveWebsite
 }: ToolbarProps) {
+  const session = useSession()
   return (
     <div className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center shadow-lg">
       <div className="flex items-center gap-4">
@@ -23,6 +26,14 @@ export default function Toolbar({
       </div>
 
       <div className="flex items-center gap-6">
+        {session?.data && (
+        <button
+          onClick={onToggleSaveWebsite}
+          className="hover:opacity-80 transition-opacity"
+          title="Save Website">
+          <Save size={20} />
+        </button>
+        )}
         <button
           onClick={onToggleSettings}
           className="hover:opacity-80 transition-opacity"

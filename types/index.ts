@@ -1,4 +1,12 @@
-import type { Layout } from 'react-grid-layout/legacy';
+import { DefaultSession } from "next-auth"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+    } & DefaultSession["user"]
+  }
+}
 
 // Component types
 export type ComponentType = 'heading' | 'text' | 'image' | 'button' | 'container' | 'navbar' | 'header';
@@ -47,6 +55,13 @@ export interface BaseComponentData {
   title?: string;
   subtitle?: string;
   href?: string;
+}
+
+export interface WebsiteData {
+  title: string;
+  items: string;
+  pageSettings: string;
+  nextId: number;
 }
 
 // Specific component data types

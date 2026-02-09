@@ -1,7 +1,6 @@
 import type {
   ComponentType,
   BaseComponentData,
-  GridConfig,
   FontSizeOption,
   GoogleFont,
   PageSettings,

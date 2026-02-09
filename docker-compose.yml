@@ -1,16 +1,4 @@
-services:
-  webme:
-    build: .
-    container_name: webme
-    restart: always
-    environment:
-       - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PW}@postgres:5432/${DATABASE_NAME}
-    ports:
-      - "3000:3000"
-    networks:
-      - internal
-      - web
-    
+services:    
   postgres:
     image: postgres:15
     restart: always
@@ -25,25 +13,8 @@ services:
     networks:
       - internal
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "8080:80"
-    depends_on:
-      - postgres
-    networks:
-      - internal
-    volumes:
-     - pgadmin-data:/var/lib/pgadmin
-
 volumes:
   webme-data:
-  pgadmin-data:
 
 networks:
   internal:
-  web:

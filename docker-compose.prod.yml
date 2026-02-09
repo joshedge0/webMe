@@ -1,0 +1,11 @@
+services:
+  webme:
+    build: .
+    container_name: webme
+    restart: always
+    environment:
+       - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PW}@postgres:5432/${DATABASE_NAME}
+    ports:
+      - "3000:3000"
+    networks:
+      - internal
